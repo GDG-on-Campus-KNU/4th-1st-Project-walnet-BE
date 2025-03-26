@@ -1,4 +1,4 @@
-package com.walnet.backend.member.entity.transaction;
+package com.walnet.backend.domain.transaction.entity;
 
 public enum TransactionStatusEnum {
     PENDING,     // 거래 요청됨 (대기 중)

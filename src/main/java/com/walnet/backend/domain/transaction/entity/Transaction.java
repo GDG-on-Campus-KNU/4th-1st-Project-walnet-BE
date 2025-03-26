@@ -1,7 +1,7 @@
-package com.walnet.backend.member.entity.transaction;
+package com.walnet.backend.domain.transaction.entity;
 
-import com.walnet.backend.member.entity.CurrencyEnum;
-import com.walnet.backend.member.entity.Wallet;
+import com.walnet.backend.domain.wallet.entity.CurrencyEnum;
+import com.walnet.backend.domain.wallet.entity.Wallet;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

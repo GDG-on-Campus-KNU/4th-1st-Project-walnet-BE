@@ -1,4 +1,4 @@
-package com.walnet.backend.member.entity;
+package com.walnet.backend.domain.wallet.entity;
 
 public enum CurrencyEnum {
     USD, KRW, EUR, JPY, CNY

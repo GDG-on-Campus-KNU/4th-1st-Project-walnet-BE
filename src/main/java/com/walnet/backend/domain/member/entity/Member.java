@@ -1,5 +1,7 @@
-package com.walnet.backend.member.entity;
+package com.walnet.backend.domain.member.entity;
 
+import com.walnet.backend.domain.account.entity.Account;
+import com.walnet.backend.domain.wallet.entity.Wallet;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

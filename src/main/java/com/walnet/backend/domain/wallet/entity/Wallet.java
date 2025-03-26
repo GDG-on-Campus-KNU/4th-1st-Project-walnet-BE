@@ -1,6 +1,7 @@
-package com.walnet.backend.member.entity;
+package com.walnet.backend.domain.wallet.entity;
 
-import com.walnet.backend.member.entity.transaction.Transaction;
+import com.walnet.backend.domain.transaction.entity.Transaction;
+import com.walnet.backend.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

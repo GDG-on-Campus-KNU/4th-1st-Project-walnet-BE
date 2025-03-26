@@ -1,4 +1,4 @@
-package com.walnet.backend.member.entity.transaction;
+package com.walnet.backend.domain.transaction.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

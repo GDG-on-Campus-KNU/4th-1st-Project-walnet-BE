@@ -1,6 +1,6 @@
-package com.walnet.backend.member.entity.transaction;
+package com.walnet.backend.domain.transaction.entity;
 
-import com.walnet.backend.member.entity.CurrencyEnum;
+import com.walnet.backend.domain.wallet.entity.CurrencyEnum;
 import jakarta.persistence.*;
 
 @Entity
