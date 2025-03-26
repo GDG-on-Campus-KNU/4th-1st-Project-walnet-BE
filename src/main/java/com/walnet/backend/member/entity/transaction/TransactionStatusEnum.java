@@ -1,6 +1,6 @@
 package com.walnet.backend.member.entity.transaction;
 
-public enum TransactionStatus {
+public enum TransactionStatusEnum {
     PENDING,     // 거래 요청됨 (대기 중)
     PROCESSING,  // 거래 처리 중 (승인 대기 등)
     COMPLETED,   // 거래 완료됨
