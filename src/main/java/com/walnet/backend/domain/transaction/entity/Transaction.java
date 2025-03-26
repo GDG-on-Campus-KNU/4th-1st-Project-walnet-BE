@@ -3,6 +3,7 @@ package com.walnet.backend.domain.transaction.entity;
 import com.walnet.backend.domain.wallet.entity.CurrencyEnum;
 import com.walnet.backend.domain.wallet.entity.Wallet;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,11 +11,12 @@ import java.time.LocalDateTime;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
+@Getter
 public abstract class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "transaction_id")
-    private int id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wallet_id")
