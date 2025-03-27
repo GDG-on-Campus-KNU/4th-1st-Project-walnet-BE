@@ -3,13 +3,14 @@ package com.walnet.backend.domain.member.entity;
 import com.walnet.backend.domain.account.entity.Account;
 import com.walnet.backend.domain.wallet.entity.Wallet;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Setter @Getter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {
@@ -22,8 +23,8 @@ public class Member {
     @Column(name = "member_name")
     private String name;
 
-    @NotBlank
-    private String loginId;
+    @Email
+    private String email;
 
     @NotBlank
     private String password;
@@ -33,4 +34,11 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Wallet> wallets;
+
+    //==연관관계 편의 메서드==//
+
+    //==생성 메서드==//
+
+    //==비즈니스 로직==//
+
 }

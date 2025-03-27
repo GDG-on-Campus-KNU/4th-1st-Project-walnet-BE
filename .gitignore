@@ -39,3 +39,4 @@ out/
 ##my ignore
 application-dev.properties
 application-prod.properties
+application-secret.properties
