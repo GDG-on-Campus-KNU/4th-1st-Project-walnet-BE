@@ -29,12 +29,6 @@ public class Member {
     @NotBlank
     private String password;
 
-    @OneToMany(mappedBy = "member")
-    private List<Account> accounts;
-
-    @OneToMany(mappedBy = "member")
-    private List<Wallet> wallets;
-
     //==연관관계 편의 메서드==//
 
     //==생성 메서드==//

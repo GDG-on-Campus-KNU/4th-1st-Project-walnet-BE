@@ -32,7 +32,4 @@ public class Wallet {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
-    private List<Transaction> transactions;
-
 }
