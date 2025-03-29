@@ -1,5 +1,6 @@
 package com.walnet.backend.domain.member.dto;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @AllArgsConstructor
@@ -7,5 +8,6 @@ import lombok.*;
 @Getter
 @Builder
 public class SendCodeRequest {
+    @Email(message = "이메일 형식이 잘못되었습니다.")
     private String email;
 }

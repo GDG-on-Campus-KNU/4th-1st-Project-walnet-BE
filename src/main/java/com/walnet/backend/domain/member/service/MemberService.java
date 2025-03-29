@@ -1,6 +1,7 @@
 package com.walnet.backend.domain.member.service;
 
 import com.walnet.backend.domain.member.entity.EmailVerification;
+import com.walnet.backend.domain.member.entity.Member;
 import com.walnet.backend.domain.member.repository.EmailVerificationRepository;
 import com.walnet.backend.domain.member.repository.MemberRepository;
 import com.walnet.backend.global.email.GmailSender;
@@ -21,6 +22,9 @@ public class MemberService {
     private final EmailVerificationRepository emailVerificationRepository;
     private final GmailSender gmailSender;
 
+    public void signUp(Member member) {
+
+    }
 
     public void sendVerificationCode(String email) {
         Optional<EmailVerification> byEmail = emailVerificationRepository.findByEmail(email);
