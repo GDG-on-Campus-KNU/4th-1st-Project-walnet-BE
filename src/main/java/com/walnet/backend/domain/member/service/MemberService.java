@@ -36,9 +36,15 @@ public class MemberService {
         gmailSender.send(email, "walnet 이메일 인증코드", "당신의 인증코드는 \"" + code + "\"입니다.");
     }
 
+    public void verifyEmail(String email, String code) {
+        Optional<EmailVerification> byEmail = emailVerificationRepository.findByEmail(email);
+        if (byEmail.isPresent()) {
+            byEmail.get().verify(code);
+        }
+    }
+
     private String generate6DigitCode() {
         int codeNum = ThreadLocalRandom.current().nextInt(0, 1000000);
         return String.format("%06d", codeNum);
     }
-
 }

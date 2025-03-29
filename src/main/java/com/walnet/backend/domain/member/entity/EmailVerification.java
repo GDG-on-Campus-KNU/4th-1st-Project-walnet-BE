@@ -1,5 +1,8 @@
 package com.walnet.backend.domain.member.entity;
 
+import com.walnet.backend.domain.member.exception.AlreadyVerifiedException;
+import com.walnet.backend.domain.member.exception.InvalidVerificationCodeException;
+import com.walnet.backend.domain.member.exception.VerificationCodeExpiredException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -54,14 +57,14 @@ public class EmailVerification {
 
     public void verify(String inputCode) {
         if (this.verified) {
-            throw new IllegalStateException("이미 인증된 이메일입니다.");
-        } else if (!this.code.equals(inputCode)) {
-            throw new IllegalArgumentException("인증 코드가 다릅니다.");
-        } else if (this.createdAt.plus(VALID_DURATION).isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("인증 코드 만료");
+            throw new AlreadyVerifiedException("이미 인증된 이메일입니다.");
+        }
+        if (!this.code.equals(inputCode)) {
+            throw new InvalidVerificationCodeException("인증 코드가 다릅니다.");
+        }
+        if (this.createdAt.plus(VALID_DURATION).isBefore(LocalDateTime.now())) {
+            throw new VerificationCodeExpiredException("인증 코드 만료되었습니다.");
         }
         this.verified = true;
     }
-
-
 }
