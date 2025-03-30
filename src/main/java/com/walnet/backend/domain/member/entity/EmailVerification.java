@@ -3,6 +3,8 @@ package com.walnet.backend.domain.member.entity;
 import com.walnet.backend.domain.member.exception.AlreadyVerifiedException;
 import com.walnet.backend.domain.member.exception.InvalidVerificationCodeException;
 import com.walnet.backend.domain.member.exception.VerificationCodeExpiredException;
+import com.walnet.backend.global.exception.BusinessException;
+import com.walnet.backend.global.exception.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -22,6 +24,7 @@ public class EmailVerification {
     
     @Id
     @Email
+    @Column(unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -48,7 +51,7 @@ public class EmailVerification {
     //==비즈니스 로직==//
     public void regenerateCode(String newCode) {
         if (this.verified) {
-            throw new IllegalStateException("이미 인증된 이메일은 재발급할 수 없습니다.");
+            throw new BusinessException(ErrorCode.ALREADY_VERIFIED);
         } else {
             this.code = newCode;
             this.createdAt = LocalDateTime.now();
@@ -57,13 +60,13 @@ public class EmailVerification {
 
     public void verify(String inputCode) {
         if (this.verified) {
-            throw new AlreadyVerifiedException("이미 인증된 이메일입니다.");
+            throw new BusinessException(ErrorCode.ALREADY_VERIFIED);
         }
         if (!this.code.equals(inputCode)) {
-            throw new InvalidVerificationCodeException("인증 코드가 다릅니다.");
+            throw new BusinessException(ErrorCode.INVALID_CODE);
         }
         if (this.createdAt.plus(VALID_DURATION).isBefore(LocalDateTime.now())) {
-            throw new VerificationCodeExpiredException("인증 코드 만료되었습니다.");
+            throw new BusinessException(ErrorCode.EXPIRED_CODE);
         }
         this.verified = true;
     }

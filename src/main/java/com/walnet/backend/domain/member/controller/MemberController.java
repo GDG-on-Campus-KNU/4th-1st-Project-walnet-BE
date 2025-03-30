@@ -1,6 +1,8 @@
 package com.walnet.backend.domain.member.controller;
 
+import com.walnet.backend.domain.member.dto.LoginRequest;
 import com.walnet.backend.domain.member.dto.SendCodeRequest;
+import com.walnet.backend.domain.member.dto.SignUpRequest;
 import com.walnet.backend.domain.member.dto.VerifyCodeRequest;
 import com.walnet.backend.domain.member.service.MemberService;
 import com.walnet.backend.global.exception.ErrorResponse;
@@ -13,10 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/member")
@@ -25,6 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<String> signUp(@RequestBody SignUpRequest signUpRequest) {
+        memberService.signUp(signUpRequest.getName(),signUpRequest.getPassword(),signUpRequest.getEmail());
+        return ResponseEntity.ok().body("회원가입 성공");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        memberService.login();
+        return ResponseEntity.ok().body("");
+    }
 
     @PostMapping("/email/send")
     public ResponseEntity<String> sendVerificationCode(@RequestBody SendCodeRequest sendCodeRequest) {

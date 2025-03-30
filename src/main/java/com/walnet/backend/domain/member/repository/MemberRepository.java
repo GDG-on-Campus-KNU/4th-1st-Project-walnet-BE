@@ -12,12 +12,20 @@ import java.util.Optional;
 public class MemberRepository {
     private final EntityManager em;
 
-    public Long save(final Member member) {
+    public Long save(Member member) {
         em.persist(member);
         return member.getId();
     }
 
-    public Optional<Member> findById(final Long id) {
+    public Optional<Member> findById(Long id) {
         return Optional.ofNullable(em.find(Member.class, id));
+    }
+
+    public Boolean existsByEmail(String email) {
+        String jpql = "select count(m) from Member m where m.email = :email";
+        Long count = em.createQuery(jpql, Long.class)
+                .setParameter("email", email)
+                .getSingleResult();
+        return count > 0;
     }
 }

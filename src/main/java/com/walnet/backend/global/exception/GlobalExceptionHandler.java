@@ -1,8 +1,5 @@
 package com.walnet.backend.global.exception;
 
-import com.walnet.backend.domain.member.exception.AlreadyVerifiedException;
-import com.walnet.backend.domain.member.exception.InvalidVerificationCodeException;
-import com.walnet.backend.domain.member.exception.VerificationCodeExpiredException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,26 +12,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(AlreadyVerifiedException.class)
-    public ErrorResponse handleAlreadyVerified(AlreadyVerifiedException e) {
-        log.error("[exceptionHandle] ex", e);
-        return new ErrorResponse("ALREADY_VERIFIED", e.getMessage());
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
+        ErrorCode errorCode = e.getErrorCode();
+        return ResponseEntity
+                .status(errorCode.getStatus())
+                .body(new ErrorResponse(errorCode.name(), errorCode.getMessage()));
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = InvalidVerificationCodeException.class)
-    public ErrorResponse handleInvalidCode(InvalidVerificationCodeException e) {
-        log.error("[exceptionHandle] ex", e);
-        return new ErrorResponse("INVALID_CODE", e.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = VerificationCodeExpiredException.class)
-    public ErrorResponse handleExpiredCode(VerificationCodeExpiredException e) {
-        log.error("[exceptionHandle] ex", e);
-        return new ErrorResponse("EXPIRED_CODE", e.getMessage());
-    }
     // ✅ 4. 메일 전송 실패
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MailException.class)

@@ -1,16 +1,19 @@
 package com.walnet.backend.domain.member.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Builder
-public class SingUpRequest {
+public class SignUpRequest {
     private String name;
-    private String
+
+    @NotBlank
+    private String password;
+
     @Email
     private String email;
-
 }

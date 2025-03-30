@@ -1,14 +1,18 @@
 package com.walnet.backend.domain.member.repository;
 
 import com.walnet.backend.domain.member.entity.EmailVerification;
+import com.walnet.backend.global.exception.BusinessException;
+import com.walnet.backend.global.exception.ErrorCode;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class EmailVerificationRepository {
     private final EntityManager em;
 
@@ -21,6 +25,17 @@ public class EmailVerificationRepository {
     }
 
     public Optional<EmailVerification> findByEmail(String email) {
-        return Optional.ofNullable(em.find(EmailVerification.class, email));
+        Optional<EmailVerification> emailVerification = Optional.ofNullable(em.find(EmailVerification.class, email));
+        log.info("emailVerification : {}", emailVerification);
+        return emailVerification;
+    }
+
+    public boolean isEmailVerified(String email) {
+        Optional<EmailVerification> byEmail = findByEmail(email);
+        if (byEmail.isPresent()) {
+            return byEmail.get().isVerified();
+        } else {
+            throw new BusinessException(ErrorCode.EMAIL_NOT_FOUND);
+        }
     }
 }

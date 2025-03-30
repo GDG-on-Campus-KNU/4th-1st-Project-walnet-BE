@@ -1,7 +1,5 @@
 package com.walnet.backend.domain.member.entity;
 
-import com.walnet.backend.domain.account.entity.Account;
-import com.walnet.backend.domain.wallet.entity.Wallet;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -11,8 +9,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,19 +17,32 @@ public class Member {
     private Long id;
 
     @NotBlank
-    @Column(name = "member_name")
+    @Column(nullable = false, unique = true)
+    private String password;
+
+    @NotBlank
     private String name;
 
     @Email
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank
-    private String password;
 
     //==연관관계 편의 메서드==//
 
     //==생성 메서드==//
+    private Member(String name, String password, String email) {
+        this.password = password;
+        this.name = name;
+        this.email = email;
+    }
+
+    public static Member create(String name, String encodedPassword, String email) {
+
+        return new Member(name, encodedPassword, email);
+    }
 
     //==비즈니스 로직==//
+
 
 }
