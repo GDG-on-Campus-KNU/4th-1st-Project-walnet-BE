@@ -1,6 +1,8 @@
 package com.walnet.backend.domain.auth.service;
 
 import com.walnet.backend.domain.auth.Entity.EmailVerification;
+import com.walnet.backend.domain.auth.dto.TokenResponse;
+import com.walnet.backend.domain.auth.jwt.JwtProvider;
 import com.walnet.backend.domain.auth.repository.EmailVerificationRepository;
 import com.walnet.backend.domain.member.entity.Member;
 import com.walnet.backend.domain.member.repository.MemberRepository;
@@ -25,6 +27,7 @@ public class AuthService {
     private final EmailVerificationRepository emailVerificationRepository;
     private final GmailSender gmailSender;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     public void signUp(String name, String password, String email) {
         if (memberRepository.existsByEmail(email)) {
@@ -40,14 +43,17 @@ public class AuthService {
         memberRepository.save(newMember);
     }
 
-    public void login(String email, String password) {
+    public TokenResponse login(String email, String password) {
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
         if(!passwordEncoder.matches(password, member.getPassword())) {
             throw new BusinessException(ErrorCode.PASSWORD_NOT_MATCH);
         }
 
+        String accessToken = jwtProvider.generateAccessToken(email);
+        String refreshToken = jwtProvider.generateRefreshToken(email);
 
+        return new TokenResponse(accessToken, refreshToken);
     }
 
     public void sendVerificationCode(String email) {
@@ -55,9 +61,6 @@ public class AuthService {
         EmailVerification ev = null;
         String code = generate6DigitCode();
         if(byEmail.isPresent()){
-            if( byEmail.get().isVerified()) {
-                throw new BusinessException(ErrorCode.ALREADY_VERIFIED);
-            }
             ev = byEmail.get();
             ev.regenerateCode(code);
         } else {
@@ -72,7 +75,7 @@ public class AuthService {
         if (byEmail.isPresent()) {
             byEmail.get().verify(code);
         } else {
-
+            throw new BusinessException(ErrorCode.EMAIL_NOT_FOUND);
         }
     }
 
@@ -81,4 +84,11 @@ public class AuthService {
         return String.format("%06d", codeNum);
     }
 
+    public TokenResponse refreshAccessToken(String token) {
+        String refreshToken = token.replace("Bearer ", "");
+        System.out.println("========================================");
+        String email = jwtProvider.extractEmailFromRefreshToken(refreshToken);
+        TokenResponse tokenResponse = jwtProvider.refreshAccessToken(refreshToken);
+        return tokenResponse;
+    }
 }

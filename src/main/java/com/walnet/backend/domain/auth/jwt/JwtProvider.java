@@ -71,7 +71,7 @@ public class JwtProvider {
         return claims.getSubject();
     }
 
-    private Claims parseClaims(String token) {
+    public Claims parseClaims(String token) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(secretKey)

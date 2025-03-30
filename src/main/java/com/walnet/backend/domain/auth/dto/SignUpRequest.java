@@ -9,11 +9,12 @@ import lombok.*;
 @Getter
 @Builder
 public class SignUpRequest {
-    private String name;
-
     @NotBlank
     private String password;
 
     @Email
     private String email;
+
+    private String name;
+
 }

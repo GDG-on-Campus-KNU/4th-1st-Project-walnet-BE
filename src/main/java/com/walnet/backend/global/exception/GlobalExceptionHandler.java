@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ProblemDetail> handleMailException(MailException e) {
         return ResponseEntity
                 .badRequest()
-                .body(ProblemDetailHelper.of(HttpStatus.BAD_REQUEST, "MAIL_ERROR", "이메일 전송에 실패했습니다."));
+                .body(ProblemDetailHelper.of(HttpStatus.BAD_REQUEST, "EMAIL_ERROR", "이메일 전송에 실패했습니다."));
     }
 
 
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ProblemDetail> handleMailSendException(MailSendException e) {
         return ResponseEntity
                 .badRequest()
-                .body(ProblemDetailHelper.of(HttpStatus.BAD_REQUEST, "MAIL_ERROR", "이메일 전송에 실패했습니다. 주소를 확인해주세요"));
+                .body(ProblemDetailHelper.of(HttpStatus.BAD_REQUEST, "INVALID_EMAIL", "이메일 전송에 실패했습니다. 주소를 확인해주세요"));
     }
 
 
