@@ -1,8 +1,5 @@
-package com.walnet.backend.domain.member.entity;
+package com.walnet.backend.domain.auth.Entity;
 
-import com.walnet.backend.domain.member.exception.AlreadyVerifiedException;
-import com.walnet.backend.domain.member.exception.InvalidVerificationCodeException;
-import com.walnet.backend.domain.member.exception.VerificationCodeExpiredException;
 import com.walnet.backend.global.exception.BusinessException;
 import com.walnet.backend.global.exception.ErrorCode;
 import jakarta.persistence.Column;

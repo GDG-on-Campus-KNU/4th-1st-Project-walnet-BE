@@ -1,4 +1,4 @@
-package com.walnet.backend.domain.member.dto;
+package com.walnet.backend.domain.auth.dto;
 
 import lombok.*;
 
@@ -7,4 +7,6 @@ import lombok.*;
 @Getter
 @Builder
 public class LoginRequest {
+    private String email;
+    private String password;
 }

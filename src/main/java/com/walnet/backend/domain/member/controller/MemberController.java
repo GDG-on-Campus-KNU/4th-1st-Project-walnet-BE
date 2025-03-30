@@ -1,20 +1,8 @@
 package com.walnet.backend.domain.member.controller;
 
-import com.walnet.backend.domain.member.dto.LoginRequest;
-import com.walnet.backend.domain.member.dto.SendCodeRequest;
-import com.walnet.backend.domain.member.dto.SignUpRequest;
-import com.walnet.backend.domain.member.dto.VerifyCodeRequest;
 import com.walnet.backend.domain.member.service.MemberService;
-import com.walnet.backend.global.exception.ErrorResponse;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,29 +13,5 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("/sign-up")
-    public ResponseEntity<String> signUp(@RequestBody SignUpRequest signUpRequest) {
-        memberService.signUp(signUpRequest.getName(),signUpRequest.getPassword(),signUpRequest.getEmail());
-        return ResponseEntity.ok().body("회원가입 성공");
-    }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        memberService.login();
-        return ResponseEntity.ok().body("");
-    }
-
-    @PostMapping("/email/send")
-    public ResponseEntity<String> sendVerificationCode(@RequestBody SendCodeRequest sendCodeRequest) {
-        memberService.sendVerificationCode(sendCodeRequest.getEmail());
-        log.info("{}로 인증코드 전송 완료",sendCodeRequest.getEmail());
-        return ResponseEntity.ok().body(sendCodeRequest.getEmail()+"로 인증코드 전송 완료");
-    }
-
-    @PostMapping("/email/verify")
-    public ResponseEntity<Object> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
-        memberService.verifyEmail(verifyCodeRequest.getEmail(), verifyCodeRequest.getCode());
-        log.info("{}로 인증 완료",verifyCodeRequest.getEmail());
-        return ResponseEntity.ok().body("인증 성공");
-    }
 }

@@ -1,6 +1,6 @@
-package com.walnet.backend.domain.member.repository;
+package com.walnet.backend.domain.auth.repository;
 
-import com.walnet.backend.domain.member.entity.EmailVerification;
+import com.walnet.backend.domain.auth.Entity.EmailVerification;
 import com.walnet.backend.global.exception.BusinessException;
 import com.walnet.backend.global.exception.ErrorCode;
 import jakarta.persistence.EntityManager;

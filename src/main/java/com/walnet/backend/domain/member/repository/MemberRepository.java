@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,6 +20,14 @@ public class MemberRepository {
 
     public Optional<Member> findById(Long id) {
         return Optional.ofNullable(em.find(Member.class, id));
+    }
+
+    public Optional<Member> findByEmail(String email) {
+        String jpql = "select m from Member m where m.email = :email";
+        List<Member> result = em.createQuery(jpql, Member.class)
+                .setParameter("email", email)
+                .getResultList();
+        return result.stream().findFirst();
     }
 
     public Boolean existsByEmail(String email) {
