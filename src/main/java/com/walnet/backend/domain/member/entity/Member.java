@@ -21,6 +21,7 @@ public class Member {
     private String password;
 
     @NotBlank
+    @Column(nullable = false)
     private String name;
 
     @Email
@@ -38,7 +39,6 @@ public class Member {
     }
 
     public static Member create(String name, String encodedPassword, String email) {
-
         return new Member(name, encodedPassword, email);
     }
 

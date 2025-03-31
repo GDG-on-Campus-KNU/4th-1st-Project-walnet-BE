@@ -1,5 +1,6 @@
 package com.walnet.backend.domain.account.repository;
 
+import com.walnet.backend.domain.account.entity.Account;
 import com.walnet.backend.domain.member.entity.Member;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +13,13 @@ import java.util.Optional;
 public class AccountRepository {
     private final EntityManager em;
 
-    public Long save(final Member member) {
-        em.persist(member);
-        return member.getId();
+    public Long save(Account account) {
+        em.persist(account);
+        return account.getId();
     }
 
-    public Optional<Member> findById(final Long id) {
-        return Optional.ofNullable(em.find(Member.class, id));
+    public Optional<Account> findById(final Long id) {
+        return Optional.ofNullable(em.find(Account.class, id));
     }
 
 }
