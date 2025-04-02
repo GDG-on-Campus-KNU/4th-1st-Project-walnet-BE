@@ -47,7 +47,7 @@ public class TestDataInit {
         walletRepository.save(testUSD);
         walletRepository.save(testJPY);
 
-        Account testAccount = Account.create(testMember, "101010101010", BankEnum.Deagu);
+        Account testAccount = Account.create(testMember, "101010101010", BankEnum.DEAGU);
         accountRepository.save(testAccount);
     }
 }

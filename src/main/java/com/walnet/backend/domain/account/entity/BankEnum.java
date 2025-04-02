@@ -12,7 +12,7 @@ public enum BankEnum {
     TOSSBANK("토스뱅크"),
     SC("SC제일은행"),
     CITY("씨티은행"),
-    Deagu("대구은행");
+    DEAGU("대구은행");
 
     private final String bankName;
 

@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @Getter
 @Builder
 public class SendCodeRequest {
