@@ -33,10 +33,10 @@ public class TestDataInit {
     public void init() {
         log.info("test data init");
         String password = passwordEncoder.encode("aaaa");
-        Member testMember = Member.create("이동재", password, "leedongjae625@gmail.com");
+        Member testMember = Member.create("이동재", password, "gdg.walnet@gmail.com");
         memberRepository.save(testMember);
 
-        EmailVerification testEmail = EmailVerification.create("leedongjae625@gmail.com", "000000");
+        EmailVerification testEmail = EmailVerification.create("gdg.walnet@gmail.com", "000000");
         testEmail.verify("000000");
         emailVerificationRepository.save(testEmail);
 
