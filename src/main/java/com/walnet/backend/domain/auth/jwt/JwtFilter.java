@@ -24,11 +24,13 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
 
     private static final List<String> EXCLUDED_URLS = List.of(
-            "/api/v1/auth/login",
-            "/api/v1/auth/signup",
-            "/api/v1/auth/email/send",
-            "/api/v1/auth/email/verify",
-            "/api/v1/auth/refresh-token"
+            "/swagger-ui.html"
+    );
+
+    private static final List<String> START_WITH_URLS = List.of(
+            "/api/v1/auth",
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
     );
 
     @Override
@@ -39,8 +41,13 @@ public class JwtFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
 
-        // ✅ 특정 URL은 토큰 검증 생략
+        // 특정 URL은 토큰 검증 생략
         if (EXCLUDED_URLS.contains(requestURI)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (START_WITH_URLS.stream().anyMatch(requestURI::startsWith)) {
             filterChain.doFilter(request, response);
             return;
         }

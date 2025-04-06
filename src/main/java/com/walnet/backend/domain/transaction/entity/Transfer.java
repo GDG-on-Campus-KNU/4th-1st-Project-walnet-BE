@@ -9,9 +9,7 @@ import lombok.Setter;
 @Entity
 @DiscriminatorValue("TRANSFER")
 @Getter
-@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Transfer extends Transaction{
     @Column(name = "transaction_account_number")
     private String accountNumber;

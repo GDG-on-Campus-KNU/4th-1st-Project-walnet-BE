@@ -1,6 +1,8 @@
 package com.walnet.backend.domain.auth.service;
 
+import com.walnet.backend.domain.account.entity.BankEnum;
 import com.walnet.backend.domain.auth.Entity.EmailVerification;
+import com.walnet.backend.domain.auth.dto.SendAccountCodeRequest;
 import com.walnet.backend.domain.auth.dto.TokenResponse;
 import com.walnet.backend.domain.auth.jwt.JwtProvider;
 import com.walnet.backend.domain.auth.repository.EmailVerificationRepository;
@@ -29,20 +31,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
 
-    public void signUp(String name, String password, String email) {
-        if (memberRepository.existsByEmail(email)) {
-            throw new BusinessException(ErrorCode.ALREADY_EXISTS_EMAIL);
-        }
-        if (!emailVerificationRepository.isEmailVerified(email)) {
-            throw new BusinessException(ErrorCode.UNVERIFIED_EMAIL);
-        }
-
-        String encodedPassword = passwordEncoder.encode(password);
-
-        Member newMember = Member.create(name, encodedPassword, email);
-        memberRepository.save(newMember);
-    }
-
     public TokenResponse login(String email, String password) {
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -57,11 +45,16 @@ public class AuthService {
     }
 
     public void sendVerificationCode(String email) {
-        Optional<EmailVerification> byEmail = emailVerificationRepository.findByEmail(email);
+        //계정이 존재하는 이메일이다.
+        if(memberRepository.findByEmail(email).isPresent()) {
+            throw new BusinessException(ErrorCode.ALREADY_EXISTS_MEMBER);
+        }
+
+        Optional<EmailVerification> emailEm = emailVerificationRepository.findByEmail(email);
         EmailVerification ev = null;
         String code = generate6DigitCode();
-        if(byEmail.isPresent()){
-            ev = byEmail.get();
+        if(emailEm.isPresent()){
+            ev = emailEm.get();
             ev.regenerateCode(code);
         } else {
             ev = EmailVerification.create(email, code);
@@ -71,6 +64,10 @@ public class AuthService {
     }
 
     public void verifyEmail(String email, String code) {
+        if(memberRepository.findByEmail(email).isPresent()) {
+            throw new BusinessException(ErrorCode.ALREADY_EXISTS_MEMBER);
+        }
+
         Optional<EmailVerification> byEmail = emailVerificationRepository.findByEmail(email);
         if (byEmail.isPresent()) {
             byEmail.get().verify(code);
@@ -79,16 +76,33 @@ public class AuthService {
         }
     }
 
+    public TokenResponse refreshAccessToken(String token) {
+        String refreshToken = token.replace("Bearer ", "");
+        String email = jwtProvider.extractEmailFromRefreshToken(refreshToken);
+        TokenResponse tokenResponse = jwtProvider.refreshAccessToken(refreshToken);
+        return tokenResponse;
+    }
+
+    public void sendVerificationCodeToAccount(SendAccountCodeRequest request) {
+        String accountNumber = request.getAccountNumber();
+        BankEnum bankName = request.getBankName();
+        String email = request.getEmail();
+        String code = generate3DigitCode();
+
+
+
+        gmailSender.send(email,"walnet 계좌 인증코드", bankName+" "+accountNumber+"\n입금자명: WAL"+code);
+    }
+
     private String generate6DigitCode() {
         int codeNum = ThreadLocalRandom.current().nextInt(0, 1000000);
         return String.format("%06d", codeNum);
     }
 
-    public TokenResponse refreshAccessToken(String token) {
-        String refreshToken = token.replace("Bearer ", "");
-        System.out.println("========================================");
-        String email = jwtProvider.extractEmailFromRefreshToken(refreshToken);
-        TokenResponse tokenResponse = jwtProvider.refreshAccessToken(refreshToken);
-        return tokenResponse;
+    private String generate3DigitCode() {
+        int codeNum = ThreadLocalRandom.current().nextInt(0, 1000);
+        return String.format("%03d", codeNum);
     }
+
+
 }

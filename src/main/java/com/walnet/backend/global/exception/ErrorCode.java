@@ -15,8 +15,8 @@ public enum ErrorCode {
     ALREADY_EXISTS_EMAIL(HttpStatus.CONFLICT, "이미 사용중인 이메일입니다."),
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 이메일입니다."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다"),
-    PASSWORD_NOT_MATCH(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다")
-    ;
+    PASSWORD_NOT_MATCH(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다"),
+    ALREADY_EXISTS_MEMBER(HttpStatus.CONFLICT, "이미 이메일로 가입한 회원이 있습니다.");
 
     private final HttpStatus status;
     private final String message;

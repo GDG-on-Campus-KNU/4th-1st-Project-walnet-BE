@@ -3,7 +3,7 @@ package com.walnet.backend.domain.auth.dto;
 import lombok.*;
 
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @Getter
 @Builder
 public class LoginRequest {

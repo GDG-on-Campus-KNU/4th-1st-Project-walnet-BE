@@ -47,18 +47,12 @@ public class EmailVerification {
 
     //==비즈니스 로직==//
     public void regenerateCode(String newCode) {
-        if (this.verified) {
-            throw new BusinessException(ErrorCode.ALREADY_VERIFIED);
-        } else {
-            this.code = newCode;
-            this.createdAt = LocalDateTime.now();
-        }
+        this.code = newCode;
+        this.createdAt = LocalDateTime.now();
+        this.verified = false;
     }
 
     public void verify(String inputCode) {
-        if (this.verified) {
-            throw new BusinessException(ErrorCode.ALREADY_VERIFIED);
-        }
         if (!this.code.equals(inputCode)) {
             throw new BusinessException(ErrorCode.INVALID_CODE);
         }

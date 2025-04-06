@@ -33,11 +33,11 @@ public class SecurityConfig {
                 // ✅ URL별 인증 설정
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/v1/auth/login",
-                                "/api/v1/auth/signup",
-                                "/api/v1/auth/email/send",
-                                "/api/v1/auth/email/verify",
-                                "/api/v1/auth/refresh-token"
+                                "/api/v1/auth/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
+
                         ).permitAll() // 인증 없이 접근 가능
 
                         .anyRequest().authenticated() // 그 외는 인증 필요

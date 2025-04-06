@@ -4,10 +4,10 @@ import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @Getter
 @Builder
-public class SendCodeRequest {
+public class SendEmailCodeRequest {
     @Email(message = "이메일 형식이 잘못되었습니다.")
     private String email;
 }

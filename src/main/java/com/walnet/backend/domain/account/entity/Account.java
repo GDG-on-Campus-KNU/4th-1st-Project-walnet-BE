@@ -3,15 +3,12 @@ package com.walnet.backend.domain.account.entity;
 import com.walnet.backend.domain.member.entity.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Entity
-@Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +20,22 @@ public class Account {
     private Member member;
 
     @NotBlank
-    @Column(name = "account_number")
-    private String number;
+    @Column(nullable = false)
+    private String accountNumber;
 
-    @NotBlank
-    private String bankName;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @NotNull
+    private BankEnum bankName;
+
+
+    private Account (Member member, String accountNumber, BankEnum bankName) {
+        this.member = member;
+        this.accountNumber = accountNumber;
+        this.bankName = bankName;
+    }
+
+    public static Account create (Member member, String accountNumber, BankEnum bankName) {
+        return new Account(member, accountNumber, bankName);
+    }
 }
