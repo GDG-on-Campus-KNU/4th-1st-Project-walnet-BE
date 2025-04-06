@@ -2,13 +2,11 @@ package com.walnet.backend.domain.member.dto;
 
 import com.walnet.backend.domain.wallet.entity.CurrencyEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
 @Getter
 @Builder
 public class WalletInfo {
