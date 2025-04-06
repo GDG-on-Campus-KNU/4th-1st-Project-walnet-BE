@@ -60,9 +60,9 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 String email = jwtProvider.extractEmailFromAccessToken(token);
 
-                // 인증 객체 생성 및 SecurityContext 설정
+                UserDetail userDetails = new UserDetail(email);
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(email, null, null);
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
