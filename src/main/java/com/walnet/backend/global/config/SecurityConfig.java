@@ -1,6 +1,7 @@
 package com.walnet.backend.global.config;
 
 import com.walnet.backend.domain.auth.jwt.JwtFilter;
+import com.walnet.backend.domain.auth.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

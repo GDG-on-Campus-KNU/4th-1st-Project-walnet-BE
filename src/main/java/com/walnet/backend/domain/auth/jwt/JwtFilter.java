@@ -12,13 +12,18 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Component
 @RequiredArgsConstructor
 @Slf4j
+@Component
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
@@ -39,16 +44,24 @@ public class JwtFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
+        log.info("jwt filter");
+        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
+
+
         String requestURI = request.getRequestURI();
 
         // 특정 URL은 토큰 검증 생략
         if (EXCLUDED_URLS.contains(requestURI)) {
-            filterChain.doFilter(request, response);
+            filterChain.doFilter(wrappedRequest, response);
             return;
         }
 
         if (START_WITH_URLS.stream().anyMatch(requestURI::startsWith)) {
-            filterChain.doFilter(request, response);
+            filterChain.doFilter(wrappedRequest, response);
+
+            String body = new String(wrappedRequest.getContentAsByteArray(), StandardCharsets.UTF_8);
+            log.info("[JwtFilter] body = {}", body);
+
             return;
         }
 
@@ -60,9 +73,9 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 String email = jwtProvider.extractEmailFromAccessToken(token);
 
-                // 인증 객체 생성 및 SecurityContext 설정
+                UserDetail userDetails = new UserDetail(email);
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(email, null, null);
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -75,7 +88,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
-        filterChain.doFilter(request, response); // 토큰 없거나 정상 인증된 경우
+        filterChain.doFilter(wrappedRequest, response); // 토큰 없거나 정상 인증된 경우
     }
 
     private void setErrorResponse(HttpServletResponse response, int status, String title, String detail) throws IOException {
